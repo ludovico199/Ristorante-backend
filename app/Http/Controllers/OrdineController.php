@@ -19,21 +19,29 @@ class OrdineController extends Controller
     }
 
     public function getTuttiGliOrdini()
-    {
-        $ordini = Ordine::with(['menu', 'statoOrdine', 'ordineMenu'])
-            ->where('stato_ordine_id', '!=', 2)
-            ->get()
-            ->map(function ($ordine) {
-                // ✅ Filtra i piatti del menu dove la tipologia ha cucina = true
-                $ordine->menu = $ordine->menu->filter(function ($menuItem) {
-                    return optional($menuItem->tipologia)->cucina === 1;
-                })->values();
+{
+    $ordini = Ordine::with([
+        'menu' => function ($query) {
+            $query->whereHas('tipologia', function ($q) {
+                $q->where('cucina', true);
+            })->with('tipologia'); // 👈 carica solo i menu con tipologia.cucina = true
+        },
+        'statoOrdine',
+        'ordineMenu'
+    ])
+    ->where('stato_ordine_id', '!=', 2)
+    ->get();
 
-                return $ordine;
-            });
+    \Log::info('Ordini restituiti:', $ordini->toArray());
 
-        return response()->json($ordini);
-    }
+    return response()->json($ordini);
+}
+
+
+
+    
+    
+    
 
     public function getOrdiniByTavolo(Request $request)
     {

@@ -28,8 +28,9 @@ class Ordine extends Model
         return $this->belongsToMany(Menu::class, 'ordine_menu')
                     ->withPivot('quantita', 'comanda_id', 'note')
                     ->withTimestamps()
-                    ->with('tipologia'); // 👈 carica la tipologia di ogni piatto
+                    ->with('tipologia'); // 👈 Carica anche la relazione tipologia
     }
+    
 
     public function ordineMenu()
     {
