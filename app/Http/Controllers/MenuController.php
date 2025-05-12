@@ -31,16 +31,19 @@ class MenuController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
+            'prezzo' => 'required|numeric|min:0',
             'tipologia_id' => 'required|exists:tipologie,id',
         ]);
-
+    
         $menu = Menu::create([
             'nome' => $request->nome,
+            'prezzo' => $request->prezzo,
             'tipologia_id' => $request->tipologia_id,
         ]);
-
+    
         return response()->json($menu, 201);
     }
+    
 
     // Metodo per aggiornare un elemento del menu esistente
     public function update(Request $request, $id)

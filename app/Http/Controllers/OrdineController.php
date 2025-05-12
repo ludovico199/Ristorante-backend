@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ordine;
 use App\Models\OrdineMenu;
+
 class OrdineController extends Controller
 {
     // Metodo per chiudere un ordine
@@ -16,15 +17,23 @@ class OrdineController extends Controller
 
         return response()->json(['success' => true]);
     }
+
     public function getTuttiGliOrdini()
     {
         $ordini = Ordine::with(['menu', 'statoOrdine', 'ordineMenu'])
             ->where('stato_ordine_id', '!=', 2)
-            ->get();
+            ->get()
+            ->map(function ($ordine) {
+                // ✅ Filtra i piatti del menu dove la tipologia ha cucina = true
+                $ordine->menu = $ordine->menu->filter(function ($menuItem) {
+                    return optional($menuItem->tipologia)->cucina === 1;
+                })->values();
+
+                return $ordine;
+            });
 
         return response()->json($ordini);
     }
-
 
     public function getOrdiniByTavolo(Request $request)
     {

@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Tipologia.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,9 +9,13 @@ class Tipologia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['descrittivo'];
+    protected $fillable = ['descrittivo', 'colore', 'cucina'];
 
     protected $table = 'tipologie';
+
+    protected $casts = [
+        'cucina' => 'boolean',
+    ];
 
     public function menus()
     {
