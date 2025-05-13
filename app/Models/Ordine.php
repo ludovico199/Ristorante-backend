@@ -11,7 +11,14 @@ class Ordine extends Model
 
     protected $table = 'ordini';
 
-    protected $fillable = ['nr_ordine', 'tavolo_id', 'stato_ordine_id', 'nr_coperti'];
+    protected $fillable = [
+        'nr_ordine',
+        'tavolo_id',
+        'stato_ordine_id',
+        'nr_coperti',
+        'totale_prezzo',
+        'totale_items',
+    ];
 
     public function tavolo()
     {
