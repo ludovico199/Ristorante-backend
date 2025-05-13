@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Creato il: Mag 06, 2025 alle 00:22
--- Versione del server: 10.4.32-MariaDB
--- Versione PHP: 8.2.12
+-- Host: localhost
+-- Creato il: Mag 13, 2025 alle 19:22
+-- Versione del server: 10.4.28-MariaDB
+-- Versione PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -142,7 +142,7 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`id`, `nome`, `tipologia_id`, `prezzo`, `created_at`, `updated_at`, `cucina`) VALUES
-(1, 'carpaccio', 1, 10.02, '2025-04-10 15:44:22', '2025-04-23 14:35:51', 0),
+(1, 'carpaccio', 1, 79.00, '2025-04-10 15:44:22', '2025-05-12 07:33:51', 0),
 (2, 'Caprese', 4, 10.00, '2025-04-10 15:44:22', '2025-04-23 14:24:24', 0),
 (3, 'Prosciutto e Melone', 3, 1222.00, '2025-04-10 15:44:22', '2025-04-23 13:59:00', 0),
 (4, 'Lasagna', 1, 10.00, '2025-04-10 15:44:22', '2025-04-23 14:05:03', 0),
@@ -197,7 +197,9 @@ INSERT INTO `menu` (`id`, `nome`, `tipologia_id`, `prezzo`, `created_at`, `updat
 (57, 'Insalata di Mare', 3, 14.00, '2025-04-10 15:45:28', '2025-04-10 15:45:28', 0),
 (58, 'Filetto al Pepe Verde', 1, 18.00, '2025-04-10 15:45:28', '2025-04-10 15:45:28', 0),
 (59, 'Carpaccio di Manzo', 2, 10.00, '2025-04-10 15:45:28', '2025-04-10 15:45:28', 0),
-(60, 'Gnocchi al Pesto', 2, 9.00, '2025-04-10 15:45:28', '2025-04-10 15:45:28', 0);
+(60, 'Gnocchi al Pesto', 2, 9.00, '2025-04-10 15:45:28', '2025-04-10 15:45:28', 0),
+(62, 'ludovico', 7, 98.00, '2025-05-10 09:20:18', '2025-05-10 09:20:18', 0),
+(63, 'prova', 17, 660.00, '2025-05-12 11:05:06', '2025-05-12 11:05:06', 0);
 
 -- --------------------------------------------------------
 
@@ -235,7 +237,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (17, '2025_04_03_194447_rename_coperti_to_numero_coperti_in_tavoli', 8),
 (18, '2025_04_03_201015_add_note_to_ordini_menus_table', 8),
 (19, '2025_04_04_162220_change_nr_ordine_column_type_in_ordini_table', 8),
-(20, '2025_04_28_181623_add_cucina_to_menu_table', 9);
+(20, '2025_04_28_181623_add_cucina_to_menu_table', 9),
+(21, '2025_05_12_094927_add_colore_to_tipologie_table', 10),
+(22, '2025_05_12_095410_add_cucina_to_tipologie_table', 11),
+(23, '2025_05_13_082431_add_totale_prezzo_and_totale_items_to_ordini_table', 12);
 
 -- --------------------------------------------------------
 
@@ -259,27 +264,17 @@ CREATE TABLE `ordine_menu` (
 --
 
 INSERT INTO `ordine_menu` (`id`, `ordine_id`, `menu_id`, `quantita`, `comanda_id`, `created_at`, `updated_at`, `note`) VALUES
-(1, 25, 2, 1, 6, '2025-05-05 16:01:13', '2025-05-05 16:01:13', NULL),
-(2, 26, 2, 1, 6, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(3, 26, 2, 1, 1, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(4, 26, 3, 1, 1, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(5, 26, 5, 1, 2, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(6, 26, 6, 1, 3, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(7, 26, 7, 1, 4, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(8, 26, 8, 1, 5, '2025-05-05 16:48:57', '2025-05-05 16:48:57', NULL),
-(9, 27, 3, 1, 3, '2025-05-05 16:51:31', '2025-05-05 16:51:31', NULL),
-(10, 28, 14, 1, 3, '2025-05-05 17:07:42', '2025-05-05 17:07:42', NULL),
-(11, 28, 27, 1, 5, '2025-05-05 17:07:42', '2025-05-05 17:07:42', NULL),
-(12, 28, 43, 1, 1, '2025-05-05 17:07:42', '2025-05-05 17:07:42', 'asdasdasd'),
-(13, 29, 16, 1, 6, '2025-05-05 17:11:58', '2025-05-05 17:11:58', NULL),
-(14, 30, 6, 1, 4, '2025-05-05 17:15:03', '2025-05-05 17:15:03', NULL),
-(15, 30, 14, 1, 1, '2025-05-05 17:15:03', '2025-05-05 17:15:03', NULL),
-(16, 30, 24, 1, 6, '2025-05-05 17:15:03', '2025-05-05 17:15:03', 'dasdada'),
-(17, 30, 28, 4, 6, '2025-05-05 17:15:03', '2025-05-05 17:15:03', NULL),
-(18, 31, 8, 3, 6, '2025-05-05 17:15:37', '2025-05-05 17:15:37', NULL),
-(19, 31, 19, 1, 6, '2025-05-05 17:15:37', '2025-05-05 17:15:37', NULL),
-(20, 31, 25, 2, 3, '2025-05-05 17:15:37', '2025-05-05 17:15:37', 'adsda'),
-(21, 31, 26, 1, 5, '2025-05-05 17:15:37', '2025-05-05 17:15:37', 'dsadas');
+(64, 61, 3, 1, 6, '2025-05-13 07:13:56', '2025-05-13 07:13:56', 'knkkkn'),
+(65, 61, 15, 1, 2, '2025-05-13 07:13:56', '2025-05-13 07:13:56', ',,'),
+(66, 61, 20, 1, 6, '2025-05-13 07:13:56', '2025-05-13 07:13:56', NULL),
+(67, 62, 21, 1, 6, '2025-05-13 07:14:34', '2025-05-13 07:14:34', NULL),
+(68, 63, 2, 1, 6, '2025-05-13 07:16:48', '2025-05-13 07:16:48', NULL),
+(69, 64, 4, 1, 4, '2025-05-13 09:57:38', '2025-05-13 09:57:38', NULL),
+(70, 65, 13, 1, 6, '2025-05-13 09:58:10', '2025-05-13 09:58:10', NULL),
+(71, 66, 5, 1, 6, '2025-05-13 09:58:54', '2025-05-13 09:58:54', NULL),
+(72, 67, 2, 1, 6, '2025-05-13 10:06:18', '2025-05-13 10:06:18', NULL),
+(73, 67, 18, 1, 6, '2025-05-13 10:06:18', '2025-05-13 10:06:18', NULL),
+(74, 68, 18, 2, 6, '2025-05-13 10:06:50', '2025-05-13 10:06:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -293,6 +288,8 @@ CREATE TABLE `ordini` (
   `tavolo_id` bigint(20) UNSIGNED NOT NULL,
   `stato_ordine_id` bigint(20) UNSIGNED NOT NULL,
   `nr_coperti` int(11) NOT NULL,
+  `totale_prezzo` int(11) NOT NULL DEFAULT 0,
+  `totale_items` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`totale_items`)),
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -301,14 +298,51 @@ CREATE TABLE `ordini` (
 -- Dump dei dati per la tabella `ordini`
 --
 
-INSERT INTO `ordini` (`id`, `nr_ordine`, `tavolo_id`, `stato_ordine_id`, `nr_coperti`, `created_at`, `updated_at`) VALUES
-(25, '6818fce9b7866', 1, 2, 74, '2025-05-05 16:01:13', '2025-05-05 16:49:12'),
-(26, '681908194e547', 1, 2, 74, '2025-05-05 16:48:57', '2025-05-05 16:49:13'),
-(27, '681908b362860', 3, 2, 4, '2025-05-05 16:51:31', '2025-05-05 17:15:22'),
-(28, '68190c7e3511f', 3, 2, 4, '2025-05-05 17:07:42', '2025-05-05 17:15:20'),
-(29, '68190d7e91166', 3, 2, 4, '2025-05-05 17:11:58', '2025-05-05 17:15:19'),
-(30, '68190e376d9e8', 3, 2, 4, '2025-05-05 17:15:03', '2025-05-05 17:15:23'),
-(31, '68190e5964d44', 3, 1, 4, '2025-05-05 17:15:37', '2025-05-05 17:15:37');
+INSERT INTO `ordini` (`id`, `nr_ordine`, `tavolo_id`, `stato_ordine_id`, `nr_coperti`, `totale_prezzo`, `totale_items`, `created_at`, `updated_at`) VALUES
+(25, '6818fce9b7866', 1, 2, 74, 0, NULL, '2025-05-05 16:01:13', '2025-05-05 16:49:12'),
+(26, '681908194e547', 1, 2, 74, 0, NULL, '2025-05-05 16:48:57', '2025-05-05 16:49:13'),
+(27, '681908b362860', 3, 2, 4, 0, NULL, '2025-05-05 16:51:31', '2025-05-05 17:15:22'),
+(28, '68190c7e3511f', 3, 2, 4, 0, NULL, '2025-05-05 17:07:42', '2025-05-05 17:15:20'),
+(29, '68190d7e91166', 3, 2, 4, 0, NULL, '2025-05-05 17:11:58', '2025-05-05 17:15:19'),
+(30, '68190e376d9e8', 3, 2, 4, 0, NULL, '2025-05-05 17:15:03', '2025-05-05 17:15:23'),
+(31, '68190e5964d44', 3, 2, 4, 0, NULL, '2025-05-05 17:15:37', '2025-05-09 09:54:42'),
+(32, '681ded12455cf', 3, 2, 4, 0, NULL, '2025-05-09 09:54:58', '2025-05-12 11:25:07'),
+(33, '681f3683633af', 3, 2, 4, 0, NULL, '2025-05-10 09:20:35', '2025-05-10 14:01:49'),
+(34, '681f57ba595c9', 3, 2, 4, 0, NULL, '2025-05-10 11:42:18', '2025-05-10 12:17:33'),
+(35, '681f5b4cde86a', 3, 2, 4, 0, NULL, '2025-05-10 11:57:32', '2025-05-10 12:14:03'),
+(36, '681f5b5cf1ae9', 3, 2, 4, 0, NULL, '2025-05-10 11:57:48', '2025-05-10 14:01:50'),
+(37, '681f5b60ea552', 3, 2, 4, 0, NULL, '2025-05-10 11:57:52', '2025-05-10 14:01:51'),
+(38, '681f5f92b35fa', 3, 2, 4, 0, NULL, '2025-05-10 12:15:46', '2025-05-10 12:17:31'),
+(39, '681f603ca7316', 3, 2, 4, 0, NULL, '2025-05-10 12:18:36', '2025-05-12 11:25:08'),
+(40, '681f604774d12', 3, 2, 4, 0, NULL, '2025-05-10 12:18:47', '2025-05-12 11:25:09'),
+(41, '681f78305c3a5', 3, 2, 4, 0, NULL, '2025-05-10 14:00:48', '2025-05-12 11:25:10'),
+(42, '681f78ae23f95', 1, 2, 3, 0, NULL, '2025-05-10 14:02:54', '2025-05-12 11:25:10'),
+(43, '6821ed8ab8b9a', 1, 2, 3, 0, NULL, '2025-05-12 10:46:02', '2025-05-12 11:25:11'),
+(44, '6821f6e460c39', 1, 2, 3, 0, NULL, '2025-05-12 11:25:56', '2025-05-12 11:40:02'),
+(45, '6821fa4250209', 1, 2, 3, 0, NULL, '2025-05-12 11:40:18', '2025-05-12 11:40:26'),
+(46, '6821fa6776675', 1, 2, 3, 0, NULL, '2025-05-12 11:40:55', '2025-05-12 11:57:06'),
+(47, '6821fe3b3a8d6', 1, 2, 3, 0, NULL, '2025-05-12 11:57:15', '2025-05-12 12:03:44'),
+(48, '6821ffc73e36b', 1, 2, 3, 0, NULL, '2025-05-12 12:03:51', '2025-05-12 20:12:26'),
+(49, '6822725218964', 1, 1, 3, 0, NULL, '2025-05-12 20:12:34', '2025-05-12 20:12:34'),
+(50, '682276ec22c23', 1, 1, 3, 0, NULL, '2025-05-12 20:32:12', '2025-05-12 20:32:12'),
+(51, '682277ea1730f', 1, 2, 3, 0, NULL, '2025-05-12 20:36:26', '2025-05-13 06:05:08'),
+(52, '6822fd81babc1', 1, 2, 3, 0, NULL, '2025-05-13 06:06:25', '2025-05-13 06:09:24'),
+(53, '682304bfa191a', 1, 1, 3, 122200, '[{\"nome\":\"Prosciutto e Melone\",\"prezzo\":\"1222.00\",\"quantita\":1,\"comanda_id\":6,\"note\":null}]', '2025-05-13 06:37:19', '2025-05-13 06:37:19'),
+(54, '6823055eb36f3', 1, 1, 3, 30900, '[{\"nome\":\"Acqua Naturale\",\"prezzo\":\"103.00\",\"quantita\":3,\"comanda_id\":3,\"note\":null}]', '2025-05-13 06:39:58', '2025-05-13 06:39:58'),
+(55, '682306f242c92', 1, 1, 3, 10300, '\"[{\\\"nome\\\":\\\"Acqua Naturale\\\",\\\"prezzo\\\":\\\"103.00\\\",\\\"quantita\\\":1,\\\"comanda_id\\\":6,\\\"note\\\":null}]\"', '2025-05-13 06:46:42', '2025-05-13 06:46:42'),
+(56, '682308b12f0f5', 1, 1, 3, 1000, '[{\"nome\":\"Pollo al Curry\",\"prezzo\":\"10.00\",\"quantita\":1,\"comanda_id\":5,\"note\":null}]', '2025-05-13 06:54:09', '2025-05-13 06:54:09'),
+(57, '68230a35cc7e0', 1, 1, 3, 1000, '[{\"nome\":\"Acqua Frizzante\",\"prezzo\":\"10.00\",\"quantita\":1,\"comanda_id\":6,\"note\":null}]', '2025-05-13 07:00:37', '2025-05-13 07:00:37'),
+(58, '68230ad4bef94', 1, 1, 3, 1000, '[{\"nome\":\"Vino Bianco\",\"prezzo\":\"10.00\",\"quantita\":1,\"comanda_id\":6,\"note\":null}]', '2025-05-13 07:03:16', '2025-05-13 07:03:16'),
+(59, '68230c3d12ea1', 1, 1, 3, 1000, '[{\"nome\":\"Vino Rosso\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":\"NO\",\"note\":null,\"isServerData\":false},{\"nome\":\"Acqua Frizzante\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":4,\"note\":null,\"isServerData\":true},{\"nome\":\"Prosciutto e Melone\",\"quantita\":1,\"prezzo\":\"1222.00\",\"turno\":6,\"note\":null,\"isServerData\":true},{\"nome\":\"Prosciutto e Melone\",\"quantita\":1,\"prezzo\":\"1222.00\",\"turno\":6,\"note\":null,\"isServerData\":true},{\"nome\":\"Acqua Naturale\",\"quantita\":3,\"prezzo\":\"103.00\",\"turno\":3,\"note\":null,\"isServerData\":true},{\"nome\":\"Acqua Naturale\",\"quantita\":1,\"prezzo\":\"103.00\",\"turno\":6,\"note\":null,\"isServerData\":true},{\"nome\":\"Pollo al Curry\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":5,\"note\":null,\"isServerData\":true},{\"nome\":\"Acqua Frizzante\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":6,\"note\":null,\"isServerData\":true},{\"nome\":\"Vino Bianco\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":6,\"note\":null,\"isServerData\":true}]', '2025-05-13 07:09:17', '2025-05-13 07:09:17'),
+(60, '68230c6590c33', 1, 1, 3, 221000, '[]', '2025-05-13 07:09:57', '2025-05-13 07:09:57'),
+(61, '68230d54c891e', 1, 1, 3, 124200, '[{\"nome\":\"Prosciutto e Melone\",\"quantita\":1,\"prezzo\":\"1222.00\",\"turno\":\"NO\",\"note\":\"knkkkn\",\"isServerData\":false},{\"nome\":\"Coca-Cola\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":2,\"note\":\",,\",\"isServerData\":false},{\"nome\":\"Espresso\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":\"NO\",\"note\":null,\"isServerData\":false}]', '2025-05-13 07:13:56', '2025-05-13 07:13:56'),
+(62, '68230d7a365e6', 1, 1, 3, 1000, '[{\"nome\":\"Prosciutto e Melone\",\"quantita\":1,\"prezzo\":\"1222.00\",\"turno\":6,\"note\":\"knkkkn\",\"isServerData\":true},{\"nome\":\"Coca-Cola\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":2,\"note\":\",,\",\"isServerData\":true},{\"nome\":\"Espresso\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":6,\"note\":null,\"isServerData\":true}]', '2025-05-13 07:14:34', '2025-05-13 07:14:34'),
+(63, '68230e0012d91', 1, 1, 3, 1000, '[{\"nome\":\"Prosciutto e Melone\",\"quantita\":1,\"prezzo\":\"1222.00\",\"turno\":6,\"note\":\"knkkkn\",\"isServerData\":true},{\"nome\":\"Coca-Cola\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":2,\"note\":\",,\",\"isServerData\":true},{\"nome\":\"Espresso\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":6,\"note\":null,\"isServerData\":true},{\"nome\":\"Cappuccino\",\"quantita\":1,\"prezzo\":\"10.00\",\"turno\":6,\"note\":null,\"isServerData\":true}]', '2025-05-13 07:16:48', '2025-05-13 07:16:48'),
+(64, '682333b2b5a50', 1, 1, 3, 0, '[\n    {\n        \"nome\": \"Lasagna\",\n        \"quantita\": 1,\n        \"prezzo\": \"10.00\",\n        \"note\": null,\n        \"isServerData\": true\n    }\n]', '2025-05-13 09:57:38', '2025-05-13 09:57:38'),
+(65, '682333d2a42fa', 1, 1, 3, 0, '[\n    {\n        \"nome\": \"Acqua Naturale\",\n        \"quantita\": 1,\n        \"prezzo\": \"103.00\",\n        \"note\": null,\n        \"isServerData\": true\n    }\n]', '2025-05-13 09:58:10', '2025-05-13 09:58:10'),
+(66, '682333fec4114', 1, 1, 3, 0, '[\n    {\n        \"nome\": \"Risotto ai Funghi\",\n        \"quantita\": 1,\n        \"prezzo\": \"1220.00\"\n    }\n]', '2025-05-13 09:58:54', '2025-05-13 09:58:54'),
+(67, '682335ba5f701', 1, 1, 3, 20, '[\n    {\n        \"nome\": \"Caprese\",\n        \"quantita\": 1,\n        \"prezzo\": \"10.00\",\n        \"note\": null,\n        \"turno\": 6,\n        \"isServerData\": true\n    },\n    {\n        \"nome\": \"Vino Rosso\",\n        \"quantita\": 1,\n        \"prezzo\": \"10.00\",\n        \"note\": null,\n        \"turno\": 6,\n        \"isServerData\": true\n    }\n]', '2025-05-13 10:06:18', '2025-05-13 10:06:18'),
+(68, '682335da286f6', 1, 1, 3, 20, '[\n    {\n        \"nome\": \"Vino Rosso\",\n        \"quantita\": 2,\n        \"prezzo\": \"10.00\"\n    }\n]', '2025-05-13 10:06:50', '2025-05-13 10:06:50');
 
 -- --------------------------------------------------------
 
@@ -405,11 +439,11 @@ CREATE TABLE `tavoli` (
 --
 
 INSERT INTO `tavoli` (`id`, `numero_tavolo`, `created_at`, `updated_at`, `numero_coperti`) VALUES
-(1, 1, NULL, '2025-05-05 16:51:00', 0),
+(1, 1, NULL, '2025-05-10 14:02:41', 3),
 (2, 2, NULL, '2025-04-29 14:41:08', 0),
-(3, 3, NULL, '2025-05-05 16:51:11', 4),
-(4, 4, NULL, '2025-05-05 16:51:05', 0),
-(5, 5, NULL, '2025-05-05 16:51:06', 0);
+(3, 3, NULL, '2025-05-13 08:41:19', 1),
+(4, 4, NULL, '2025-05-13 08:55:50', 0),
+(5, 5, NULL, '2025-05-13 08:56:02', 0);
 
 -- --------------------------------------------------------
 
@@ -421,21 +455,24 @@ CREATE TABLE `tipologie` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `descrittivo` varchar(255) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `colore` varchar(255) DEFAULT NULL,
+  `cucina` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dump dei dati per la tabella `tipologie`
 --
 
-INSERT INTO `tipologie` (`id`, `descrittivo`, `created_at`, `updated_at`) VALUES
-(1, 'Antipasti', '2025-04-10 15:37:31', '2025-04-10 15:37:31'),
-(2, 'Primi', '2025-04-10 15:37:31', '2025-04-10 15:37:31'),
-(3, 'Secondi', '2025-04-10 15:37:31', '2025-04-10 15:37:31'),
-(4, 'Dolci', '2025-04-10 15:37:31', '2025-04-10 15:37:31'),
-(5, 'Bevande', '2025-04-10 15:37:31', '2025-04-10 15:37:31'),
-(6, 'Vini', '2025-04-10 15:37:31', '2025-04-10 15:37:31'),
-(7, 'Caffè', '2025-04-10 15:37:32', '2025-04-10 15:37:32');
+INSERT INTO `tipologie` (`id`, `descrittivo`, `created_at`, `updated_at`, `colore`, `cucina`) VALUES
+(1, 'Antipasti', '2025-04-10 15:37:31', '2025-05-12 20:04:52', '#fbff00', 1),
+(2, 'Primi', '2025-04-10 15:37:31', '2025-05-12 20:12:47', '#FF0000', 0),
+(3, 'Secondi', '2025-04-10 15:37:31', '2025-05-12 20:04:57', '#008000', 1),
+(4, 'Dolci', '2025-04-10 15:37:31', '2025-05-13 12:41:55', '#9b0896', 0),
+(5, 'Bevande', '2025-04-10 15:37:31', '2025-05-12 20:05:01', '#FFA500', 1),
+(6, 'Vini', '2025-04-10 15:37:31', '2025-05-12 20:05:04', '#0000FF', 1),
+(7, 'Caffè', '2025-04-10 15:37:32', '2025-05-12 20:05:06', '#800080', 1),
+(17, 'prova', '2025-05-12 07:56:27', '2025-05-12 20:05:09', '#000000', 1);
 
 -- --------------------------------------------------------
 
@@ -599,25 +636,25 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT per la tabella `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT per la tabella `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT per la tabella `ordine_menu`
 --
 ALTER TABLE `ordine_menu`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT per la tabella `ordini`
 --
 ALTER TABLE `ordini`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT per la tabella `personal_access_tokens`
@@ -635,13 +672,13 @@ ALTER TABLE `stato_ordini`
 -- AUTO_INCREMENT per la tabella `tavoli`
 --
 ALTER TABLE `tavoli`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT per la tabella `tipologie`
 --
 ALTER TABLE `tipologie`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT per la tabella `users`
