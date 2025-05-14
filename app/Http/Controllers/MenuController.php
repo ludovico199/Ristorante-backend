@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
-    // Metodo per ottenere tutti gli elementi del menu
+    // GET /api/menu
     public function index()
     {
         $menu = Menu::all();
         return response()->json($menu);
     }
 
-    // Metodo per ottenere un elemento specifico del menu
+    // GET /api/menu/{id}
     public function show($id)
     {
         $menu = Menu::find($id);
@@ -26,26 +26,22 @@ class MenuController extends Controller
         return response()->json($menu);
     }
 
-    // Metodo per creare un nuovo elemento del menu
+    // POST /api/menu
     public function store(Request $request)
     {
-        $request->validate([
-            'nome' => 'required|string|max:255',
-            'prezzo' => 'required|numeric|min:0',
+        $validated = $request->validate([
+            'nome'         => 'required|string|max:255',
+            'prezzo'       => 'required|numeric|min:0',
+            'quantita'     => 'required|integer|min:0',       // ← validazione
             'tipologia_id' => 'required|exists:tipologie,id',
         ]);
-    
-        $menu = Menu::create([
-            'nome' => $request->nome,
-            'prezzo' => $request->prezzo,
-            'tipologia_id' => $request->tipologia_id,
-        ]);
-    
+
+        $menu = Menu::create($validated);
+
         return response()->json($menu, 201);
     }
-    
 
-    // Metodo per aggiornare un elemento del menu esistente
+    // PUT /api/menu/{id}
     public function update(Request $request, $id)
     {
         $menu = Menu::find($id);
@@ -54,19 +50,19 @@ class MenuController extends Controller
             return response()->json(['message' => 'Elemento non trovato'], 404);
         }
 
-        $request->validate([
-            'nome' => 'sometimes|string|max:255',
-            'prezzo' => 'sometimes|numeric|min:0',
+        $validated = $request->validate([
+            'nome'         => 'sometimes|string|max:255',
+            'prezzo'       => 'sometimes|numeric|min:0',
+            'quantita'     => 'sometimes|integer|min:0',       // ← validazione
             'tipologia_id' => 'sometimes|exists:tipologie,id',
         ]);
-        
-        $menu->update($request->only(['nome', 'prezzo', 'tipologia_id']));
 
+        $menu->update($validated);
 
         return response()->json($menu);
     }
 
-    // Metodo per eliminare un elemento del menu
+    // DELETE /api/menu/{id}
     public function destroy($id)
     {
         $menu = Menu::find($id);

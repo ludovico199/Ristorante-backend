@@ -57,4 +57,28 @@ class OrdineController extends Controller
 
         return response()->json($ordini);
     }
+
+    public function cronologiaOrdini()
+{
+    // qui ritorni proprio tutti gli Ordine, incluso stato = 2
+    $ordini = Ordine::with('ordineMenu.menu', 'statoOrdine')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+    return response()->json($ordini);
+}
+public function index(Request $request)
+{
+    $tavoloId = $request->query('tavolo_id');
+
+    $ordini = OrdineMenu::with('menu', 'ordine')
+        ->whereHas('ordine', function ($query) use ($tavoloId) {
+            $query->where('tavolo_id', $tavoloId)
+                  ->where('stato_ordine_id', '!=', 2);
+        })
+        ->get();
+
+    return response()->json($ordini);
+}
+
 }

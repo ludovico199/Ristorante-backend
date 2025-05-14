@@ -9,8 +9,13 @@ class Menu extends Model
 {
     use HasFactory;
 
-    // Aggiungi 'prezzo' al campo $fillable
-    protected $fillable = ['nome', 'tipologia_id', 'prezzo'];  // <-- aggiunto 'prezzo'
+    // Aggiungo 'quantita' al campo $fillable
+    protected $fillable = [
+        'nome',
+        'tipologia_id',
+        'prezzo',
+        'quantita',    // ← nuovo
+    ];
 
     protected $table = 'Menu';
 
@@ -26,4 +31,3 @@ class Menu extends Model
                     ->withTimestamps();
     }
 }
-

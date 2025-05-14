@@ -26,7 +26,7 @@ Route::get('/ordini', [Ordine_Menu_Controller::class, 'index']);
 Route::put('/ordini/{id}/chiudi', [OrdineController::class, 'chiudiOrdine']);
 Route::get('/ordini-per-tavolo', [OrdineController::class, 'getOrdiniByTavolo']);
 Route::get('/tutti-gli-ordini', [OrdineController::class, 'getTuttiGliOrdini']);
-
+Route::get('/cronologia-ordini', [OrdineController::class, 'cronologiaOrdini']);
 
 Route::get('/tipologie', [Tipologie_Controller::class, 'index']);
 Route::post('/tipologie', [Tipologie_Controller::class, 'store']);
