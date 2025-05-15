@@ -12,7 +12,7 @@ class Ordine_Menu_Controller extends Controller
     public function store(Request $request)
     {
         Log::info('Richiesta ricevuta:', $request->all());
-
+    
         $validatedData = $request->validate([
             'numero_coperti' => 'required|integer',
             'stato_ordine' => 'required|integer|exists:stato_ordini,id',
@@ -23,24 +23,27 @@ class Ordine_Menu_Controller extends Controller
             'menu_items.*.note' => 'nullable|string',
             'menu_items.*.comanda_id' => 'sometimes|nullable|integer',
         ]);
-
+    
         $totaleItems = [];
         $totalePrezzo = 0;
-
+    
         foreach ($validatedData['menu_items'] as $item) {
             $menu = \App\Models\Menu::find($item['menu_id']);
             if ($menu) {
-                $itemTotal = $menu->prezzo * $item['quantita'];
+                $prezzoUnitario = round($menu->prezzo, 2);
+                $itemTotal = $prezzoUnitario * $item['quantita'];
                 $totalePrezzo += $itemTotal;
-
+    
                 $totaleItems[] = [
                     'nome'     => $menu->nome,
                     'quantita' => $item['quantita'],
-                    'prezzo'   => $menu->prezzo,
+                    'prezzo'   => $prezzoUnitario,
                 ];
             }
         }
-
+    
+        $totalePrezzo = round($totalePrezzo, 2);
+    
         $ordine = Ordine::create([
             'nr_ordine'       => uniqid(),
             'tavolo_id'       => $validatedData['tavolo_id'],
@@ -49,13 +52,13 @@ class Ordine_Menu_Controller extends Controller
             'totale_items'    => json_encode($totaleItems, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
             'totale_prezzo'   => $totalePrezzo,
         ]);
-
+    
         foreach ($validatedData['menu_items'] as $item) {
             $exists = OrdineMenu::where('ordine_id', $ordine->id)
                 ->where('menu_id', $item['menu_id'])
                 ->where('comanda_id', $item['comanda_id'] ?? null)
                 ->exists();
-
+    
             if (! $exists) {
                 OrdineMenu::create([
                     'ordine_id'  => $ordine->id,
@@ -70,14 +73,21 @@ class Ordine_Menu_Controller extends Controller
                     ->where('comanda_id', $item['comanda_id'] ?? null)
                     ->increment('quantita', $item['quantita']);
             }
+    
+            // Aggiorna quantità disponibile
+            $menuItem = \App\Models\Menu::find($item['menu_id']);
+            if ($menuItem && $menuItem->quantita !== null) {
+                $menuItem->quantita = max(0, $menuItem->quantita - $item['quantita']);
+                $menuItem->save();
+            }
         }
-
+    
         return response()->json([
             'message' => 'Ordine creato con successo',
             'ordine' => $ordine,
         ], 201);
     }
-
+    
     /**
      * Restituisce gli ordini attivi per tavolo (non chiusi)
      */
