@@ -7,17 +7,20 @@ use Illuminate\Http\Request;
 
 class TavoloController extends Controller
 {
-    // Metodo per ottenere tutti i tavoli
+    // Metodo per ottenere tutti i tavoli con i loro ordini
     public function index()
     {
-        $tavoli = Tavolo::all();
+        // Eager load della relazione "ordini"
+        $tavoli = Tavolo::with('ordini')->get();
+
         return response()->json($tavoli);
     }
 
-    // Metodo per ottenere un tavolo specifico
+    // Metodo per ottenere un tavolo specifico con i suoi ordini
     public function show($id)
     {
-        $tavolo = Tavolo::find($id);
+        // Eager load della relazione "ordini"
+        $tavolo = Tavolo::with('ordini')->find($id);
 
         if (!$tavolo) {
             return response()->json(['message' => 'Tavolo non trovato'], 404);
@@ -30,11 +33,11 @@ class TavoloController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'numero_tavolo' => 'required|integer|unique:tavoli,numero_tavolo',
+            'numero_tavolo'   => 'required|integer|unique:tavoli,numero_tavolo',
         ]);
         
         $tavolo = Tavolo::create([
-            'numero_tavolo' => $request->numero_tavolo,
+            'numero_tavolo'  => $request->numero_tavolo,
             'numero_coperti' => 0, // inizializza a 0
         ]);
 
@@ -51,13 +54,13 @@ class TavoloController extends Controller
         }
 
         $request->validate([
-            'numero_tavolo' => 'required|integer',
-            'numero_coperti' => 'required|integer',
+            'numero_tavolo'   => 'required|integer',
+            'numero_coperti'  => 'required|integer|min:0',
         ]);
 
         $tavolo->update([
-            'numero_tavolo' => $request->numero_tavolo,
-            'numero_coperti' => $request->numero_coperti,
+            'numero_tavolo'   => $request->numero_tavolo,
+            'numero_coperti'  => $request->numero_coperti,
         ]);
 
         return response()->json($tavolo);
@@ -85,19 +88,17 @@ class TavoloController extends Controller
             return response()->json(['message' => 'Tavolo non trovato'], 404);
         }
 
-        // Validazione per numero coperti
         $request->validate([
             'coperti' => 'required|integer|min:0',
         ]);
 
-        // Aggiorna solo il campo numero_coperti
         $tavolo->update([
             'numero_coperti' => $request->coperti,
         ]);
 
         return response()->json([
             'message' => 'Numero di coperti aggiornato con successo',
-            'tavolo' => $tavolo
+            'tavolo'  => $tavolo,
         ]);
     }
 }
