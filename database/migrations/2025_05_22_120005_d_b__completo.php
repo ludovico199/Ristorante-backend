@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     public function up(): void
@@ -24,6 +25,15 @@ return new class extends Migration {
             $table->string('descrittivo');
             $table->timestamps();
         });
+
+        DB::table('comande')->insert([
+            ['id' => 1, 'descrittivo' => 'Turno 1', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'descrittivo' => 'Turno 2', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 3, 'descrittivo' => 'Turno 3', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 4, 'descrittivo' => 'Turno 4', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 5, 'descrittivo' => 'Turno 5', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 6, 'descrittivo' => 'NO',       'created_at' => now(), 'updated_at' => now()],
+        ]);
 
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
@@ -58,6 +68,14 @@ return new class extends Migration {
             $table->integer('finished_at')->nullable();
         });
 
+        Schema::create('tipologie', function (Blueprint $table) {
+            $table->id();
+            $table->string('descrittivo');
+            $table->timestamps();
+            $table->string('colore')->nullable();
+            $table->boolean('cucina')->default(false);
+        });
+
         Schema::create('menu', function (Blueprint $table) {
             $table->id();
             $table->string('nome');
@@ -68,10 +86,33 @@ return new class extends Migration {
             $table->boolean('cucina')->default(false);
         });
 
-        Schema::create('migrations', function (Blueprint $table) {
+        Schema::create('tavoli', function (Blueprint $table) {
             $table->id();
-            $table->string('migration');
-            $table->integer('batch');
+            $table->integer('numero_tavolo');
+            $table->timestamps();
+            $table->integer('numero_coperti')->default(0);
+        });
+
+        Schema::create('stato_ordini', function (Blueprint $table) {
+            $table->id();
+            $table->string('descrittivo');
+            $table->timestamps();
+        });
+
+        DB::table('stato_ordini')->insert([
+            ['id' => 1, 'descrittivo' => 'In Corso', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 2, 'descrittivo' => 'Concluso', 'created_at' => now(), 'updated_at' => now()],
+        ]);
+
+        Schema::create('ordini', function (Blueprint $table) {
+            $table->id();
+            $table->string('nr_ordine');
+            $table->foreignId('tavolo_id')->constrained('tavoli');
+            $table->foreignId('stato_ordine_id')->constrained('stato_ordini');
+            $table->integer('nr_coperti');
+            $table->decimal('totale_prezzo', 8, 2);
+            $table->json('totale_items')->nullable();
+            $table->timestamps();
         });
 
         Schema::create('ordine_menu', function (Blueprint $table) {
@@ -83,17 +124,6 @@ return new class extends Migration {
             $table->timestamps();
             $table->text('note')->nullable();
             $table->unique(['ordine_id', 'menu_id', 'comanda_id']);
-        });
-
-        Schema::create('ordini', function (Blueprint $table) {
-            $table->id();
-            $table->string('nr_ordine');
-            $table->foreignId('tavolo_id')->constrained('tavoli');
-            $table->foreignId('stato_ordine_id')->constrained('stato_ordini');
-            $table->integer('nr_coperti');
-            $table->decimal('totale_prezzo', 8, 2);
-            $table->json('totale_items')->nullable();
-            $table->timestamps();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -126,26 +156,7 @@ return new class extends Migration {
             $table->index('last_activity');
         });
 
-        Schema::create('stato_ordini', function (Blueprint $table) {
-            $table->id();
-            $table->string('descrittivo');
-            $table->timestamps();
-        });
 
-        Schema::create('tavoli', function (Blueprint $table) {
-            $table->id();
-            $table->integer('numero_tavolo');
-            $table->timestamps();
-            $table->integer('numero_coperti')->default(0);
-        });
-
-        Schema::create('tipologie', function (Blueprint $table) {
-            $table->id();
-            $table->string('descrittivo');
-            $table->timestamps();
-            $table->string('colore')->nullable();
-            $table->boolean('cucina')->default(false);
-        });
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
