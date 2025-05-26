@@ -10,11 +10,10 @@ class TavoloController extends Controller
     // Metodo per ottenere tutti i tavoli con i loro ordini
     public function index()
     {
-        // Eager load della relazione "ordini"
-        $tavoli = Tavolo::with('ordini')->get();
-
+        $tavoli = Tavolo::with(['righeOrdine.menu', 'righeOrdine.ordine'])->get();
         return response()->json($tavoli);
     }
+    
 
     // Metodo per ottenere un tavolo specifico con i suoi ordini
     public function show($id)
